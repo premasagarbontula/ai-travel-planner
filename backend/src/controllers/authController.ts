@@ -1,11 +1,20 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 
+import { validationResult } from "express-validator";
+
 import User from "../models/User";
 import generateToken from "../utils/generateToken";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
     const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({
@@ -30,7 +39,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
