@@ -7,6 +7,7 @@ export interface IActivity {
 
 export interface IDayPlan {
   day: number;
+  theme: string;
   activities: IActivity[];
 }
 
@@ -17,6 +18,7 @@ export interface ITrip extends Document {
   budget: string;
   interests: string[];
   itinerary: IDayPlan[];
+  estimatedBudget: string;
   user: mongoose.Types.ObjectId;
 }
 
@@ -38,6 +40,10 @@ const dayPlanSchema = new Schema(
   {
     day: {
       type: Number,
+      required: true,
+    },
+    theme: {
+      type: String,
       required: true,
     },
     activities: [activitySchema],
@@ -72,11 +78,17 @@ const tripSchema = new Schema<ITrip>(
 
     interests: {
       type: [String],
-      required: true,
+      required: [true, "At least one interest is required"],
     },
 
-    itinerary: [dayPlanSchema],
-
+    itinerary: {
+      type: [dayPlanSchema],
+      default: [],
+    },
+    estimatedBudget: {
+      type: String,
+      default: "",
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

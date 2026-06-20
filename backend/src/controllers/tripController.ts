@@ -1,24 +1,16 @@
 import { Response } from "express";
 import { validationResult } from "express-validator";
 
-import Trip from "../models/Trip";
+import Trip, { IDayPlan } from "../models/Trip";
+
 import { AuthRequest } from "../types/auth";
 
-const mockItinerary = [
-  {
-    day: 1,
-    activities: [
-      {
-        time: "09:00 AM",
-        activity: "Explore local attractions",
-      },
-      {
-        time: "01:00 PM",
-        activity: "Lunch at famous restaurant",
-      },
-    ],
-  },
-];
+import { generateTravelPlan } from "../services/geminiService";
+
+interface AITripResponse {
+  estimatedBudget: string;
+  itinerary: IDayPlan[];
+}
 
 export const generateTrip = async (req: AuthRequest, res: Response) => {
   try {
@@ -31,17 +23,46 @@ export const generateTrip = async (req: AuthRequest, res: Response) => {
     }
 
     const { destination, days, budget, interests } = req.body;
-
-    const trip = await Trip.create({
-      title: `${destination} Trip`,
+    const aiResponse = await generateTravelPlan(
       destination,
       days,
       budget,
       interests,
-      itinerary: mockItinerary,
+    );
+    if (!aiResponse) {
+      return res.status(500).json({
+        message: "No response from AI",
+      });
+    }
+
+    let parsedData: AITripResponse;
+    
+    try {
+      parsedData = JSON.parse(aiResponse) as AITripResponse;
+    } catch {
+      return res.status(500).json({
+        message: "Failed to parse AI response",
+      });
+    }
+    if (!parsedData.estimatedBudget || !Array.isArray(parsedData.itinerary)) {
+      return res.status(500).json({
+        message: "Invalid AI response",
+      });
+    }
+
+    const trip = await Trip.create({
+      title: `${destination} ${days}-Day Trip`,
+      destination,
+      days,
+      budget,
+      interests,
+
+      estimatedBudget: parsedData.estimatedBudget,
+
+      itinerary: parsedData.itinerary,
+
       user: req.userId,
     });
-
     res.status(201).json({
       message: "Trip generated successfully",
       trip,
