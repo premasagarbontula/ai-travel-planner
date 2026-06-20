@@ -19,6 +19,14 @@ Rules:
 4. Include estimatedBudget.
 5. Include theme for each day.
 6. Generate exactly ${days} days.
+7. Estimated budget must always be in Indian Rupees (INR).
+8. Include flights, accommodation, local transportation, food, and attraction costs.
+9. Budget should be realistic for the specified number of days and budget category.
+10. Return estimatedBudget as a single string in the format:
+    "₹45,000 - ₹60,000"
+11. Do not use foreign currencies such as USD, AED, SGD, EUR, or JPY.
+12. Do not include explanatory text such as "per person" or "excluding flights".
+13. Assume the trip is for one person.
 
 Expected JSON format:
 
@@ -61,7 +69,7 @@ Expected JSON format:
   );
 
   const data = await response.json();
-  
+
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) {
     return null;

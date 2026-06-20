@@ -36,7 +36,7 @@ export const generateTrip = async (req: AuthRequest, res: Response) => {
     }
 
     let parsedData: AITripResponse;
-    
+
     try {
       parsedData = JSON.parse(aiResponse) as AITripResponse;
     } catch {
@@ -66,6 +66,72 @@ export const generateTrip = async (req: AuthRequest, res: Response) => {
     res.status(201).json({
       message: "Trip generated successfully",
       trip,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+export const getTrips = async (req: AuthRequest, res: Response) => {
+  try {
+    const trips = await Trip.find({
+      user: req.userId,
+    }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(trips);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+export const getTripById = async (req: AuthRequest, res: Response) => {
+  try {
+    const trip = await Trip.findOne({
+      _id: req.params.id,
+      user: req.userId,
+    });
+
+    if (!trip) {
+      return res.status(404).json({
+        message: "Trip not found",
+      });
+    }
+
+    res.status(200).json(trip);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+export const deleteTrip = async (req: AuthRequest, res: Response) => {
+  try {
+    const trip = await Trip.findOneAndDelete({
+      _id: req.params.id,
+      user: req.userId,
+    });
+
+    if (!trip) {
+      return res.status(404).json({
+        message: "Trip not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Trip deleted successfully",
     });
   } catch (error) {
     console.error(error);
