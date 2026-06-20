@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import chalk from "chalk";
 
 import connectDB from "./config/db";
 
@@ -34,5 +35,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(chalk.green.bold(`Server running on port ${PORT}`));
 });
