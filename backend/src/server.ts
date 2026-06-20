@@ -7,6 +7,7 @@ import chalk from "chalk";
 import connectDB from "./config/db";
 
 import authRoutes from "./routes/authRoutes";
+import tripRoutes from "./routes/tripRoutes";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(
 
 //routes
 app.use("/api/auth", authRoutes);
+app.use("/api/trips", tripRoutes);
 
 app.get("/", (req, res) => {
   res.send("Travel Planner API Running");
