@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { loginUser, getMe } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
+  const { user, loading } = useAuth();
+
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -38,6 +40,15 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
   return (
     <div>
       <h1>Login</h1>

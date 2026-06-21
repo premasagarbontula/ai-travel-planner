@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { registerUser, getMe } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
 
 export default function RegisterPage() {
+  const { user, loading } = useAuth();
+
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -39,6 +41,15 @@ export default function RegisterPage() {
     }
   };
 
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
   return (
     <div>
       <h1>Register</h1>

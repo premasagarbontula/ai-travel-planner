@@ -6,7 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import TripCard from "@/components/TripCard";
 
 import { useAuth } from "@/context/AuthContext";
-import { getTrips } from "@/services/tripService";
+import { deleteTrip, getTrips } from "@/services/tripService";
 
 import { Trip } from "@/types/trip";
 
@@ -29,6 +29,15 @@ export default function DashboardPage() {
     fetchTrips();
   }, []);
 
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteTrip(id);
+
+      setTrips((prev) => prev.filter((trip) => trip._id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <ProtectedRoute>
       <div>
@@ -38,7 +47,7 @@ export default function DashboardPage() {
         <h2>Your Trips</h2>
 
         {trips.map((trip) => (
-          <TripCard key={trip._id} trip={trip} />
+          <TripCard key={trip._id} trip={trip} onDelete={handleDelete} />
         ))}
       </div>
     </ProtectedRoute>
