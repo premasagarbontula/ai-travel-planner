@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
-import { getTripById } from "@/services/tripService";
+import { getTripById, regenerateTrip } from "@/services/tripService";
 
 import { Trip } from "@/types/trip";
 import {
@@ -17,12 +17,50 @@ import {
   Lightbulb,
 } from "lucide-react";
 export default function TripDetailsPage() {
+  const [editing, setEditing] = useState(false);
+
+  const [destination, setDestination] = useState("");
+  const [days, setDays] = useState("3");
+  const [budget, setBudget] = useState("medium");
+  const [interests, setInterests] = useState("");
+
+  const [regenerating, setRegenerating] = useState(false);
+  const [trip, setTrip] = useState<Trip | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const params = useParams();
 
   const id = params.id as string;
 
-  const [trip, setTrip] = useState<Trip | null>(null);
-  const [loading, setLoading] = useState(true);
+  const handleRegenerate = async () => {
+    if (!trip) return;
+
+    try {
+      setRegenerating(true);
+
+      const { data } = await regenerateTrip(trip._id, {
+        destination,
+        days: Number(days),
+        budget,
+        interests: interests
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+      });
+
+      setTrip(data.trip);
+
+      toast.success("Trip regenerated successfully");
+
+      setEditing(false);
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Failed to regenerate trip");
+    } finally {
+      setRegenerating(false);
+    }
+  };
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -30,6 +68,10 @@ export default function TripDetailsPage() {
         const { data } = await getTripById(id);
 
         setTrip(data);
+        setDestination(data.destination);
+        setDays(String(data.days));
+        setBudget(data.budget);
+        setInterests(data.interests.join(", "));
       } catch (error) {
         console.error(error);
         toast.error("Couldn't load this trip.");
@@ -69,6 +111,12 @@ export default function TripDetailsPage() {
         </p>
 
         <h1 className="mt-2 text-3xl font-bold text-slate-900">{trip.title}</h1>
+        <button
+          onClick={() => setEditing(!editing)}
+          className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+        >
+          {editing ? "Cancel" : "Edit & Regenerate"}
+        </button>
 
         <div className="mt-5 flex flex-wrap gap-5 text-sm text-slate-600">
           <span className="flex items-center gap-2">
@@ -87,7 +135,88 @@ export default function TripDetailsPage() {
           </span>
         </div>
       </div>
+      {editing && (
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-xl font-semibold text-slate-900">
+            Edit & Regenerate Trip
+          </h2>
 
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Destination
+              </label>
+
+              <input
+                type="text"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Days
+              </label>
+
+              <input
+                type="number"
+                min={1}
+                max={30}
+                value={days}
+                onChange={(e) => setDays(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Budget
+              </label>
+
+              <select
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-600"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Interests
+              </label>
+
+              <input
+                type="text"
+                value={interests}
+                onChange={(e) => setInterests(e.target.value)}
+                placeholder="food, beaches, hiking"
+                className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-600"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={handleRegenerate}
+            disabled={regenerating}
+            className="mt-5 flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {regenerating ? (
+              <>
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+                Regenerating...
+              </>
+            ) : (
+              "Regenerate Trip"
+            )}
+          </button>
+        </div>
+      )}
       <div className="mt-10 flex flex-col gap-8">
         {trip.itinerary.map((day) => (
           <div

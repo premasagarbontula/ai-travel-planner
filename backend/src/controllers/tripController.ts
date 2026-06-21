@@ -134,7 +134,10 @@ export const regenerateTrip = async (req: AuthRequest, res: Response) => {
 
     await trip.save();
 
-    res.json(trip);
+    res.json({
+      message: "Trip regenerated successfully",
+      trip,
+    });
   } catch (error) {
     console.error(error);
 
