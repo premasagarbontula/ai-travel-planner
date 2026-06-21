@@ -8,12 +8,12 @@ import axios from "axios";
 
 import { loginUser, getMe } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
-import { Loader, LoaderCircle, Plane } from "lucide-react";
+import { Eye, EyeOff, Loader, LoaderCircle, Plane } from "lucide-react";
 const inputClasses =
   "w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors focus:border-blue-600";
 export default function LoginPage() {
   const { user, loading } = useAuth();
-
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -113,15 +113,29 @@ export default function LoginPage() {
               Password
             </label>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className={inputClasses}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className={`${inputClasses} pr-12`}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
