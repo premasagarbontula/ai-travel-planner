@@ -27,19 +27,53 @@ Rules:
 11. Do not use foreign currencies such as USD, AED, SGD, EUR, or JPY.
 12. Do not include explanatory text such as "per person" or "excluding flights".
 13. Assume the trip is for one person.
+14. Suggest exactly 3 hotels based on destination, budget, and traveler popularity.
+15. Return one Budget hotel, one Mid Range hotel, and one Luxury hotel.
+16. Each hotel must include name, type and description.
+17. For every activity include a bestTime field.
+18. bestTime should help avoid crowds, improve views, weather, or the overall experience.
+19. For every activity include a proTip field.
+20. proTip should be a short practical recommendation related to that activity.
+    
 
 Expected JSON format:
-
 {
-  "estimatedBudget": "₹25000",
+  "estimatedBudget": "₹25,000 - ₹40,000",
+
+  "hotels": [
+    {
+      "name": "Hotel Sakura Tokyo",
+      "type": "Budget",
+      "description": "Affordable stay near metro stations"
+    },
+    {
+      "name": "Shinjuku Grand Hotel",
+      "type": "Mid Range",
+      "description": "Comfortable stay in central Tokyo"
+    },
+    {
+      "name": "Tokyo Imperial Palace Hotel",
+      "type": "Luxury",
+      "description": "Premium luxury experience"
+    }
+  ],
+
   "itinerary": [
     {
       "day": 1,
-      "theme": "Beach Exploration",
+      "theme": "Tokyo Highlights",
       "activities": [
         {
           "time": "09:00 AM",
-          "activity": "Visit attraction"
+          "activity": "Visit Tokyo Skytree",
+          "bestTime": "Sunset",
+          "proTip": "Book tickets online in advance"
+        },
+        {
+          "time": "02:00 PM",
+          "activity": "Explore Asakusa",
+          "bestTime": "Weekday afternoons",
+          "proTip": "Carry cash for local street vendors"
         }
       ]
     }

@@ -7,8 +7,15 @@ import { AuthRequest } from "../types/auth";
 
 import { generateTravelPlan } from "../services/geminiService";
 
+interface AIHotel {
+  name: string;
+  type: "Budget" | "Mid Range" | "Luxury";
+  description: string;
+}
+
 interface AITripResponse {
   estimatedBudget: string;
+  hotels: AIHotel[];
   itinerary: IDayPlan[];
 }
 
@@ -44,7 +51,11 @@ export const generateTrip = async (req: AuthRequest, res: Response) => {
         message: "Failed to parse AI response",
       });
     }
-    if (!parsedData.estimatedBudget || !Array.isArray(parsedData.itinerary)) {
+    if (
+      !parsedData.estimatedBudget ||
+      !Array.isArray(parsedData.itinerary) ||
+      !Array.isArray(parsedData.hotels)
+    ) {
       return res.status(500).json({
         message: "Invalid AI response",
       });
@@ -59,10 +70,13 @@ export const generateTrip = async (req: AuthRequest, res: Response) => {
 
       estimatedBudget: parsedData.estimatedBudget,
 
+      hotels: parsedData.hotels,
+
       itinerary: parsedData.itinerary,
 
       user: req.userId,
     });
+
     res.status(201).json({
       message: "Trip generated successfully",
       trip,
