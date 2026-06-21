@@ -1,6 +1,14 @@
 export interface Activity {
   time: string;
   activity: string;
+  bestTime: string;
+  proTip: string;
+}
+
+export interface Hotel {
+  name: string;
+  type: "Budget" | "Mid Range" | "Luxury";
+  description: string;
 }
 
 export interface DayPlan {
@@ -17,5 +25,6 @@ export interface Trip {
   budget: string;
   interests: string[];
   estimatedBudget: string;
+  hotels: Hotel[];
   itinerary: DayPlan[];
 }

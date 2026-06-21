@@ -7,7 +7,15 @@ import toast from "react-hot-toast";
 import { getTripById } from "@/services/tripService";
 
 import { Trip } from "@/types/trip";
-import { LoaderCircle, MapPin, Calendar, Wallet } from "lucide-react";
+import {
+  LoaderCircle,
+  MapPin,
+  Calendar,
+  Wallet,
+  Hotel,
+  Clock3,
+  Lightbulb,
+} from "lucide-react";
 export default function TripDetailsPage() {
   const params = useParams();
 
@@ -96,23 +104,89 @@ export default function TripDetailsPage() {
               </h2>
             </div>
 
-            <div className="mt-6 border-l-2 border-slate-200 pl-5">
+            <div className="mt-4 flex flex-col gap-4 border-l-2 border-slate-200 pl-5">
               {day.activities.map((activity, index) => (
-                <div key={index} className="relative mb-6 last:mb-0">
-                  <span className="absolute -left-[29px] top-1 h-3 w-3 rounded-full bg-blue-600" />
+                <div
+                  key={index}
+                  className="relative rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
+                  <span className="absolute -left-[29px] top-5 h-3 w-3 rounded-full bg-blue-600" />
 
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                  <p className="text-xs font-semibold text-blue-600">
                     {activity.time}
                   </p>
 
-                  <p className="mt-1 text-sm leading-6 text-slate-700">
+                  <p className="mt-1 font-medium text-slate-900">
                     {activity.activity}
                   </p>
+
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-start gap-2">
+                      <Clock3 className="mt-0.5 h-4 w-4 text-amber-500" />
+                      <div>
+                        <p className="text-xs font-semibold text-slate-700">
+                          Best Time
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {activity.bestTime}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <Lightbulb className="mt-0.5 h-4 w-4 text-green-600" />
+                      <div>
+                        <p className="text-xs font-semibold text-slate-700">
+                          Pro Tip
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {activity.proTip}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-12">
+        <h2 className="mb-4 text-2xl font-bold text-slate-900">
+          Recommended Hotels
+        </h2>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {trip.hotels.map((hotel, index) => (
+            <div
+              key={index}
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <Hotel className="h-5 w-5 text-blue-600" />
+
+                <span
+                  className={`rounded-full px-2 py-1 text-xs font-medium ${
+                    hotel.type === "Budget"
+                      ? "bg-green-100 text-green-700"
+                      : hotel.type === "Mid Range"
+                        ? "bg-amber-100 text-amber-700"
+                        : "bg-purple-100 text-purple-700"
+                  }`}
+                >
+                  {hotel.type}
+                </span>
+              </div>
+
+              <h3 className="text-lg font-semibold text-slate-900">
+                {hotel.name}
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-600">{hotel.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
