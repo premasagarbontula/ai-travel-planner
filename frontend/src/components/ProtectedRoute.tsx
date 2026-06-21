@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 import { useAuth } from "@/context/AuthContext";
 
@@ -21,7 +22,11 @@ export default function ProtectedRoute({
   }, [user, loading, router]);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <LoaderCircle className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
   }
 
   if (!user) {

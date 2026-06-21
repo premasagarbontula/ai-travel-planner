@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 import { getTripById } from "@/services/tripService";
 
 import { Trip } from "@/types/trip";
-
+import { LoaderCircle, MapPin, Calendar, Wallet } from "lucide-react";
 export default function TripDetailsPage() {
   const params = useParams();
 
   const id = params.id as string;
 
   const [trip, setTrip] = useState<Trip | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -22,50 +24,96 @@ export default function TripDetailsPage() {
         setTrip(data);
       } catch (error) {
         console.error(error);
+        toast.error("Couldn't load this trip.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTrip();
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center">
+        <LoaderCircle className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
   if (!trip) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">
+        <p className="text-xl font-semibold text-slate-900">Trip Not Found</p>
+
+        <p className="text-sm text-slate-500">
+          This trip may have been deleted.
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>{trip.title}</h1>
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-xs font-medium uppercase tracking-widest text-blue-600">
+          Travel Itinerary
+        </p>
 
-      <p>
-        Destination:
-        {trip.destination}
-      </p>
+        <h1 className="mt-2 text-3xl font-bold text-slate-900">{trip.title}</h1>
 
-      <p>
-        Budget:
-        {trip.estimatedBudget}
-      </p>
+        <div className="mt-5 flex flex-wrap gap-5 text-sm text-slate-600">
+          <span className="flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-blue-600" />
+            {trip.destination}
+          </span>
 
-      <p>
-        Days:
-        {trip.days}
-      </p>
+          <span className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-blue-600" />
+            {trip.days} {trip.days === 1 ? "day" : "days"}
+          </span>
 
-      {trip.itinerary.map((day) => (
-        <div key={day.day}>
-          <h2>Day {day.day}</h2>
-
-          <h3>{day.theme}</h3>
-
-          {day.activities.map((activity, index) => (
-            <div key={index}>
-              <strong>{activity.time}</strong>
-
-              <p>{activity.activity}</p>
-            </div>
-          ))}
+          <span className="flex items-center gap-2">
+            <Wallet className="h-4 w-4 text-green-600" />
+            {trip.estimatedBudget}
+          </span>
         </div>
-      ))}
+      </div>
+
+      <div className="mt-10 flex flex-col gap-8">
+        {trip.itinerary.map((day) => (
+          <div
+            key={day.day}
+            className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+          >
+            <div className="flex items-center gap-4">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                {day.day}
+              </span>
+
+              <h2 className="text-xl font-semibold text-slate-900">
+                {day.theme}
+              </h2>
+            </div>
+
+            <div className="mt-6 border-l-2 border-slate-200 pl-5">
+              {day.activities.map((activity, index) => (
+                <div key={index} className="relative mb-6 last:mb-0">
+                  <span className="absolute -left-[29px] top-1 h-3 w-3 rounded-full bg-blue-600" />
+
+                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {activity.time}
+                  </p>
+
+                  <p className="mt-1 text-sm leading-6 text-slate-700">
+                    {activity.activity}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
