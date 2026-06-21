@@ -12,3 +12,13 @@ export const generateTrip = (data: {
   budget: string;
   interests: string[];
 }) => api.post("/trips/generate", data);
+
+export const regenerateTrip = (
+  id: string,
+  tripData: {
+    destination: string;
+    days: number;
+    budget: string;
+    interests: string[];
+  },
+) => api.put(`/trips/${id}/regenerate`, tripData);

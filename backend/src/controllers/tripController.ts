@@ -89,6 +89,60 @@ export const generateTrip = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+export const regenerateTrip = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const trip = await Trip.findOne({
+      _id: id,
+      user: req.userId,
+    });
+
+    if (!trip) {
+      return res.status(404).json({
+        message: "Trip not found",
+      });
+    }
+
+    const { destination, days, budget, interests } = req.body;
+
+    const aiResponse = await generateTravelPlan(
+      destination,
+      days,
+      budget,
+      interests,
+    );
+
+    if (!aiResponse) {
+      return res.status(500).json({
+        message: "No response from AI",
+      });
+    }
+
+    const parsedData = JSON.parse(aiResponse);
+
+    trip.destination = destination;
+    trip.days = days;
+    trip.budget = budget;
+    trip.interests = interests;
+
+    trip.title = `${destination} ${days}-Day Trip`;
+
+    trip.estimatedBudget = parsedData.estimatedBudget;
+    trip.itinerary = parsedData.itinerary;
+    trip.hotels = parsedData.hotels;
+
+    await trip.save();
+
+    res.json(trip);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
 
 export const getTrips = async (req: AuthRequest, res: Response) => {
   try {
