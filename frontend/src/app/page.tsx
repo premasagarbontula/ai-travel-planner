@@ -9,7 +9,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[80vh] items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <LoaderCircle className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
@@ -19,7 +19,7 @@ export default function Home() {
     <div className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-linear-to-b from-blue-50 via-slate-50 to-slate-100" />
 
-      <section className="mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 text-center">
+      <section className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-6 text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-medium uppercase tracking-widest text-blue-600 shadow-sm">
           <Sparkles className="h-3.5 w-3.5" />
           AI-Powered Travel Planning
@@ -66,13 +66,13 @@ export default function Home() {
           )}
         </div>
 
-        <div className="mt-16 flex items-center gap-4 text-slate-400">
+        <div className="mt-10 flex items-center gap-4 text-slate-400">
           <span className="h-px w-16 bg-slate-300" />
           <Plane className="h-5 w-5 -rotate-45" />
           <span className="h-px w-16 bg-slate-300" />
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <h3 className="font-semibold text-slate-900">AI Itineraries</h3>
             <p className="mt-2 text-sm text-slate-500">

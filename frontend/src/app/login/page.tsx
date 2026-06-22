@@ -65,14 +65,14 @@ export default function LoginPage() {
   }, [user, loading, router]);
   if (loading) {
     return (
-      <div className="flex min-h-[80vh] items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <Loader className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
           <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">

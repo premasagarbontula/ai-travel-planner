@@ -85,7 +85,7 @@ export default function TripDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[80vh] items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <LoaderCircle className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
@@ -93,7 +93,7 @@ export default function TripDetailsPage() {
 
   if (!trip) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-2 text-center">
         <p className="text-xl font-semibold text-slate-900">Trip Not Found</p>
 
         <p className="text-sm text-slate-500">

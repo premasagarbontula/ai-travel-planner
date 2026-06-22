@@ -1,10 +1,59 @@
 # AI Travel Planner
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success)](https://ai-travel-planner-sepia-nine.vercel.app)
+
+## Deployment Links
+
+### Frontend (Vercel)
+
+https://ai-travel-planner-sepia-nine.vercel.app
+
+### Backend API (Render)
+
+https://ai-travel-planner-7liu.onrender.com
+
+## Demo Credentials
+
+**Email:** test@user.com  
+**Password:** Test@1234
+
+## Screenshots
+
+### Home
+
+![Home](./screenshots/home.png)
+
+### Login
+
+![Login](./screenshots/login.png)
+
+### Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+### Create Trip
+
+![Create Trip](./screenshots/create-trip.png)
+
+### AI Generated Itinerary
+
+![Trip Details](./screenshots/trip-details.png)
+
+### Hotel Recommendations
+
+![Hotels](./screenshots/hotels.png)
+
+### Edit & Regenerate Trip
+
+![Regenerate](./screenshots/regenerate-trip.png)
+
 ## Project Overview
 
 AI Travel Planner is a full-stack web application that generates personalized travel itineraries using Generative AI. Users can create an account, generate AI-powered travel plans based on their destination, budget, trip duration, and interests, and manage their trips through an intuitive dashboard.
 
 The application uses Google Gemini to create detailed day-by-day itineraries, recommend hotels, estimate trip budgets, and provide activity-specific travel insights.
+
+The application demonstrates full-stack development, secure authentication, AI integration, prompt engineering, and cloud deployment.
 
 ---
 
@@ -33,6 +82,7 @@ The application uses Google Gemini to create detailed day-by-day itineraries, re
 - Hotel recommendations
 - Best time to visit each activity
 - Practical travel tips for each activity
+- Activity Insights (Best Time + Travel Tip)
 
 ### UI/UX
 
@@ -110,7 +160,7 @@ Capable of generating structured JSON responses for travel itineraries, hotel re
 #### 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/premasagarbontula/ai-travel-planner
 cd ai-travel-planner
 ```
 
@@ -185,7 +235,7 @@ http://localhost:5000
 Configure:
 
 ```env
-NEXT_PUBLIC_API_URL=https://ai-travel-planner-7liu.onrender.com
+NEXT_PUBLIC_API_URL=https://ai-travel-planner-7liu.onrender.com/api
 ```
 
 Deploy using Vercel.
@@ -343,10 +393,10 @@ This feature demonstrates:
 
 ## Bonus Feature: Hotel Recommendations
 
-The AI suggests:
+The AI recommends three hotel options:
 
 - Budget Hotel
-- Mid Range Hotel
+- Mid-Range Hotel
 - Luxury Hotel
 
 Recommendations are generated based on:
