@@ -185,7 +185,7 @@ http://localhost:5000
 Configure:
 
 ```env
-NEXT_PUBLIC_API_URL=<backend-api-url>
+NEXT_PUBLIC_API_URL=https://ai-travel-planner-7liu.onrender.com
 ```
 
 Deploy using Vercel.
