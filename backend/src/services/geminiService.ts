@@ -20,7 +20,8 @@ Rules:
 5. Include theme for each day.
 6. Generate exactly ${days} days.
 7. Estimated budget must always be in Indian Rupees (INR).
-8. Include flights, accommodation, local transportation, food, and attraction costs.
+8. Include estimated costs for accommodation, local transportation, food, and attractions.
+   Assume the traveler is departing from a major Indian city such as Hyderabad, Mumbai, Delhi, or Bengaluru when estimating flights.
 9. Budget should be realistic for the specified number of days and budget category.
 10. Return estimatedBudget as a single string in the format:
     "₹45,000 - ₹60,000"

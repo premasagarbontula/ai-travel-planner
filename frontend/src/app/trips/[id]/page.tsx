@@ -110,10 +110,23 @@ export default function TripDetailsPage() {
           Travel Itinerary
         </p>
 
-        <h1 className="mt-2 text-3xl font-bold text-slate-900">{trip.title}</h1>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <h1 className="text-3xl font-bold text-slate-900">{trip.title}</h1>
+          <p
+            className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
+              trip.budget === "low"
+                ? "bg-green-100 text-green-700"
+                : trip.budget === "medium"
+                  ? "bg-amber-100 text-amber-700"
+                  : "bg-purple-100 text-purple-700"
+            }`}
+          >
+            {trip.budget.charAt(0).toUpperCase() + trip.budget.slice(1)} Budget
+          </p>
+        </div>
         <button
           onClick={() => setEditing(!editing)}
-          className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-lg mt-3 bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
         >
           {editing ? "Cancel" : "Edit & Regenerate"}
         </button>
