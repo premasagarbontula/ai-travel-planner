@@ -12,6 +12,10 @@ https://ai-travel-planner-sepia-nine.vercel.app
 
 https://ai-travel-planner-7liu.onrender.com
 
+## Walkthrough Video
+
+[https://drive.google.com/file/d/xxxxxxxxxxxxxxxx/view?usp=sharing](https://drive.google.com/file/d/1X7jt8JR4IWirK0Eqk4GOb1iLVF1MOv2t/view?usp=sharing)
+
 ## Demo Credentials
 
 **Email:** test@user.com  
